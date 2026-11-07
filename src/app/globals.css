@@ -1,0 +1,370 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Identidad visual — paleta y tipografía del portfolio
+   ------------------------------------------------------------------ */
+@theme inline {
+  --color-ink: #191817; /* negro carbón */
+  --color-paper: #f5f3f0; /* blanco cálido */
+  --color-rose: #e8a0b9; /* rosa suave (acento) */
+  --color-blush: #f3dce5; /* rosa pálido */
+  --color-stone: #a5a19f; /* gris neutro */
+  --color-sage: #8f9f8b; /* verde apagado (detalle puntual) */
+
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  background: var(--color-ink);
+}
+
+body {
+  background-color: var(--color-ink);
+  /* Cuadrícula sutil, como en la referencia: da estructura al fondo oscuro */
+  background-image:
+    linear-gradient(to right, rgb(245 243 240 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(245 243 240 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-rose);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-rose);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------
+   Movimiento
+   ------------------------------------------------------------------ */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-line {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0s);
+}
+
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+
+.spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+.caret {
+  animation: caret 1.1s steps(1) infinite;
+}
+
+.pulse-line {
+  animation: pulse-line 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track,
+  .spin-slow,
+  .caret,
+  .pulse-line,
+  .fade-up {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Gato del hero (SVG). Cada parte tiene su propio grupo y su movimiento.
+   Los orígenes de transformación están en unidades del viewBox (420 × 480).
+   Capas de la cabeza, de fuera hacia dentro:
+     follow (cursor) → bob (respiración) → idle (inclinaciones ocasionales)
+   ------------------------------------------------------------------ */
+.cat {
+  overflow: visible;
+}
+
+/* Respiración: el cuerpo se expande desde la base y la cabeza acompaña */
+.cat-breathe {
+  transform-origin: 200px 464px;
+  animation: cat-breathe 4.8s ease-in-out infinite;
+}
+
+.cat-head-bob {
+  animation: cat-bob 4.8s ease-in-out infinite;
+}
+
+@keyframes cat-breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.01, 1.022);
+  }
+}
+
+@keyframes cat-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+/* Cola: la base y la punta oscilan a ritmos distintos para que ondule */
+.cat-tail {
+  transform-origin: 270px 440px;
+  animation: cat-tail 5.6s ease-in-out infinite alternate;
+}
+
+.cat-tail-tip {
+  transform-origin: 366px 366px;
+  animation: cat-tail-tip 5.6s ease-in-out -0.9s infinite alternate;
+}
+
+@keyframes cat-tail {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes cat-tail-tip {
+  from {
+    transform: rotate(8deg);
+  }
+  to {
+    transform: rotate(-10deg);
+  }
+}
+
+/* Cabeza: sigue al cursor (variables escritas desde Cat.tsx) */
+.cat-head-follow {
+  transform-origin: 200px 215px;
+  transform: translate(calc(var(--head-x, 0) * 1px), calc(var(--head-y, 0) * 1px))
+    rotate(calc(var(--head-r, 0) * 1deg));
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Cabeza: inclinaciones ocasionales, a un lado y al otro */
+.cat-head-idle {
+  transform-origin: 200px 215px;
+  animation: cat-head-tilt 17s ease-in-out infinite;
+}
+
+@keyframes cat-head-tilt {
+  0%,
+  20%,
+  42%,
+  70%,
+  90%,
+  100% {
+    transform: rotate(0deg);
+  }
+  26%,
+  36% {
+    transform: rotate(-5deg);
+  }
+  76%,
+  84% {
+    transform: rotate(4deg);
+  }
+}
+
+/* Orejas: gesto sutil + se levantan al pasar el cursor por encima */
+.cat-ear-l,
+.cat-ear-l-perk {
+  transform-origin: 150px 118px;
+}
+
+.cat-ear-r,
+.cat-ear-r-perk {
+  transform-origin: 250px 118px;
+}
+
+.cat-ear-l {
+  animation: cat-ear-l 9s ease-in-out infinite;
+}
+
+.cat-ear-r {
+  animation: cat-ear-r 12.5s ease-in-out -4s infinite;
+}
+
+.cat-ear-l-perk,
+.cat-ear-r-perk {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cat[data-hover="true"] .cat-ear-l-perk {
+  transform: rotate(-4deg);
+}
+
+.cat[data-hover="true"] .cat-ear-r-perk {
+  transform: rotate(4deg);
+}
+
+@keyframes cat-ear-l {
+  0%,
+  62%,
+  76%,
+  100% {
+    transform: rotate(0deg);
+  }
+  66% {
+    transform: rotate(-7deg);
+  }
+  70% {
+    transform: rotate(1deg);
+  }
+}
+
+@keyframes cat-ear-r {
+  0%,
+  40%,
+  54%,
+  100% {
+    transform: rotate(0deg);
+  }
+  44% {
+    transform: rotate(6deg);
+  }
+  48% {
+    transform: rotate(-1deg);
+  }
+}
+
+/* Ojos: parpadeo natural y mirada curiosa ocasional */
+.cat-blink {
+  animation: cat-blink 6.4s ease-in-out infinite;
+}
+
+.cat-blink-l {
+  transform-origin: 163px 150px;
+}
+
+.cat-blink-r {
+  transform-origin: 237px 150px;
+}
+
+@keyframes cat-blink {
+  0%,
+  91%,
+  97%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.06);
+  }
+}
+
+.cat-look {
+  transform: translate(calc(var(--look-x, 0) * 1px), calc(var(--look-y, 0) * 1px));
+  transition: transform 0.3s ease-out;
+}
+
+.cat-glance {
+  animation: cat-glance 13s ease-in-out infinite;
+}
+
+@keyframes cat-glance {
+  0%,
+  30%,
+  54%,
+  74%,
+  96%,
+  100% {
+    transform: translate(0, 0);
+  }
+  36%,
+  48% {
+    transform: translate(-3px, 0);
+  }
+  80%,
+  90% {
+    transform: translate(3px, -1px);
+  }
+}
+
+/* Sin animaciones ni seguimiento si el usuario las tiene desactivadas */
+@media (prefers-reduced-motion: reduce) {
+  .cat,
+  .cat * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Modal nativo <dialog>: fondo y bloqueo de scroll */
+dialog::backdrop {
+  background: rgb(25 24 23 / 0.72);
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
