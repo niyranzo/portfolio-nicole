@@ -53,6 +53,11 @@ export const en: Dictionary = {
       "REST APIs",
     ],
     social: { github: "GitHub", linkedin: "LinkedIn" },
+    cv: {
+      label: "Download CV",
+      file: "/cv/Nicole_Yranzo_CV_EN.pdf",
+      fileName: "Nicole_Yranzo_CV_EN.pdf",
+    },
   },
 
   about: {

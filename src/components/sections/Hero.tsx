@@ -96,13 +96,12 @@ export function Hero({ t }: { t: Dictionary["hero"] }) {
                 <LinkedinIcon className="size-5" />
               </a>
               <a
-                href="/cv/Nicole_Yranzo_CV.pdf"
-                download="Nicole_Yranzo_CV.pdf"
-                aria-label="Descargar CV"
+                href={t.cv.file}
+                download={t.cv.fileName}
                 className={`${socialClass} !w-auto gap-2 px-4`}
               >
-                <DownloadIcon className="size-4" />
-                <span className="text-sm font-medium">Descargar CV</span>
+                <DownloadIcon aria-hidden="true" className="size-4" />
+                <span className="text-sm font-medium">{t.cv.label}</span>
               </a>
             </div>
           </FadeUp>

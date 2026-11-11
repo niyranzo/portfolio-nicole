@@ -49,6 +49,11 @@ export const es = {
       "APIs REST",
     ],
     social: { github: "GitHub", linkedin: "LinkedIn" },
+    cv: {
+      label: "Descargar CV",
+      file: "/cv/Nicole_Yranzo_CV.pdf",
+      fileName: "Nicole_Yranzo_CV.pdf",
+    },
   },
 
   about: {
